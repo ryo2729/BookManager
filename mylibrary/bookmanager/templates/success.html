@@ -2,6 +2,11 @@
 <head><title>Success</title></head>
 <body>
   <h1>本の情報が登録されました。</h1>
-</body>
+  <h2>登録された書籍情報</h1>
+  <p>ISBN: {{ book.isbn }}</p>
+  <p>タイトル: {{ book.title }}</p>
+  <p>著者: {{ book.author }}</p>
+  <p>出版社: {{ book.publisher }}</p>
   <a href= "{% url 'index'%}">ホームに戻る</a>
+</body>
 </html>

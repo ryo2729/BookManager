@@ -4,11 +4,11 @@ from .models import Book
 import requests
 import re
 
-# 情報を登録する部分
 def validate_isbn(isbn):
     pattern = r"^(?:ISBN(?:-10)?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$"  
     return bool(re.match(pattern, isbn))
 
+# 情報を登録する部分
 def get_book_info(isbn):
     URL = f"https://api.openbd.jp/v1/get?isbn={isbn}&pretty"
     r = requests.get(URL)
@@ -28,8 +28,8 @@ def index(request):
             if validate_isbn(isbn):
                 title, author, publisher = get_book_info(isbn)
                 if title:
-                    Book.objects.create(isbn=isbn, title=title, author=author, publisher=publisher)
-                    return redirect('success')
+                    book = Book.objects.create(isbn=isbn, title=title, author=author, publisher=publisher)
+                    return redirect('success', book_id=book.id)
                 else:
                     return render(request, 'index.html', {'form': form, 'error': 'このISBNに該当する本はありませんでした。'})
             else:
@@ -38,8 +38,9 @@ def index(request):
         form = ISBNForm()
     return render(request, 'index.html', {'form': form})
 
-def success(request):
-    return render(request, 'success.html')
+def success(request, book_id):
+    book = Book.objects.get(pk=book_id)
+    return render(request, 'success.html', {'book': book})
 
 
 # 情報を閲覧する部分
@@ -56,11 +57,6 @@ def delete_book(request, book_id):
     book = Book.objects.get(pk=book_id)
     book.delete()
     return redirect('book_list')
-
-
-
-
-
 
 
 # Create your views here.
