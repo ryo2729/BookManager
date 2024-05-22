@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.forms import ValidationError
+from django.db import IntegrityError
 from .forms import ISBNForm
 from .models import Book
 import requests
@@ -28,8 +30,11 @@ def index(request):
             if validate_isbn(isbn):
                 title, author, publisher = get_book_info(isbn)
                 if title:
-                    book = Book.objects.create(isbn=isbn, title=title, author=author, publisher=publisher)
-                    return redirect('success', book_id=book.id)
+                    try:
+                        book = Book.objects.create(isbn=isbn, title=title, author=author, publisher=publisher)
+                        return redirect('success', book_id=book.id)
+                    except IntegrityError:
+                        return render(request, 'index.html', {'form': form, 'error': 'このISBNの書籍は既に登録されています。'})
                 else:
                     return render(request, 'index.html', {'form': form, 'error': 'このISBNに該当する本はありませんでした。'})
             else:
