@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>蔵書一覧</title>
+</head>
+<body>
+    <h1>蔵書一覧</h1>
+    <form method="get">
+        {% csrf_token %}
+        <label for="keyword">検索キーワード:</label>
+        <input type="text" id="keyword" name="keyword">
+        <button type="submit">検索</button>
+      </form>
+    <a href="{% url 'book_list' %}">キーワードをリセット</a>
+    <ul>
+        {% for book in books %}
+            <li>
+                Title: {{ book.title }}<br>
+                Author: {{ book.author }}<br>
+                Publisher: {{ book.publisher }}<br>
+                <a href="{% url 'delete_book' book.id %}">削除</a><br><br>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href= "{% url 'index'%}">ホームに戻る</a>
+</body>
+</html>
