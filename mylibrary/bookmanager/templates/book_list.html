@@ -14,12 +14,12 @@
     <a href="{% url 'book_list' %}">キーワードをリセット</a>
     <ul>
         {% for book in books %}
-            <li>
-                Title: {{ book.title }}<br>
-                Author: {{ book.author }}<br>
-                Publisher: {{ book.publisher }}<br>
-                <a href="{% url 'delete_book' book.id %}">削除</a><br><br>
-            </li>
+        <li>
+            Title: {{ book.title }}<br>
+            Author: {{ book.author }}<br>
+            Publisher: {{ book.publisher }}<br>
+            <a href="{% url 'delete_book' book.id %}">削除</a><br><br>
+        </li>
         {% endfor %}
     </ul>
     <a href= "{% url 'index'%}">ホームに戻る</a>
