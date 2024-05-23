@@ -47,7 +47,6 @@ def success(request, book_id):
     book = Book.objects.get(pk=book_id)
     return render(request, 'success.html', {'book': book})
 
-
 # 情報を閲覧する部分
 def book_list(request):
     keyword = request.GET.get('keyword')
